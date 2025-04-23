@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Student Tracking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-light: #4895ef;
+            --secondary-color: #3f37c9;
+            --accent-color: #7209b7;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .language-selector {
+            text-align: right;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .language-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+        
+        .language-btn:hover, .language-btn.active {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 80px 0 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            opacity: 0.6;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .tagline {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: -50px auto 60px;
+            gap: 25px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .feature-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            min-width: 250px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease both;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.3s; }
+        .feature-card:nth-child(2) { animation-delay: 0.5s; }
+        .feature-card:nth-child(3) { animation-delay: 0.7s; }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feature-icon {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+        
+        .feature-card h3 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .login-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 50px;
+            margin-bottom: 70px;
+        }
+        
+        .login-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            min-width: 350px;
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInLeft 0.8s ease;
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--gradient);
+        }
+        
+        .login-box h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            position: relative;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background-color: white;
+        }
+        
+        .login-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .login-button:hover::after {
+            left: 100%;
+        }
+        
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .forgot-password a:hover {
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+        
+        .about-system {
+            flex: 1.5;
+            min-width: 300px;
+            animation: fadeInRight 0.8s ease;
+        }
+        
+        .about-system h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .about-system p {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .about-system ul {
+            background-color: white;
+            padding: 25px 25px 25px 45px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            list-style-type: none;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .about-system li {
+            margin-bottom: 15px;
+            position: relative;
+            line-height: 1.7;
+            padding-left: 25px;
+        }
+        
+        .about-system li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: var(--gradient);
+            border-radius: 50%;
+        }
+        
+        .video-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 60px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.03);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .video-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+        
+        .video-section p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            background: #000;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -5px 30px rgba(67, 97, 238, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            opacity: 0.4;
+        }
+        
+        footer p {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        footer a:hover {
+            color: #f8f9fa;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                flex-direction: column;
+                margin-top: -30px;
+            }
+            
+            .login-section {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .login-box, .about-system {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            header {
+                padding: 60px 0 40px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .language-selector {
+                position: static;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Floating animation for header elements */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        /* Pulse animation for buttons */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-selector">
+            <button class="language-btn active" onclick="changeLanguage('en')">English</button>
+            <button class="language-btn" onclick="changeLanguage('ky')">Кыргызча</button>
+            <button class="language-btn" onclick="changeLanguage('ru')">Русский</button>
+        </div>
+        
+        <header>
+            <h1 data-translate="title" class="floating">EduTrack - Student Tracking System</h1>
+            <p class="tagline" data-translate="tagline">Modern solution for education efficiency and tracking</p>
+        </header>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 data-translate="feature1_title">Performance Analysis</h3>
+                <p data-translate="feature1_desc">Analyze student achievements with detailed graphs, easily identify gaps.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3 data-translate="feature2_title">Effective Calendar</h3>
+                <p data-translate="feature2_desc">View all exams, assignments and events in a single calendar, get reminders.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 data-translate="feature3_title">Detailed Reports</h3>
+                <p data-translate="feature3_desc">Create and share automatic reports tracking student progress.</p>
+            </div>
+        </div>
+        
+        <section class="login-section">
+            <div class="login-box">
+                <h2 data-translate="login_title">Login</h2>
+                <form action="/login" method="post">
+                    <div class="form-group">
+                        <label for="username" data-translate="username_label">Username</label>
+                        <input type="text" id="username" name="username" data-translate="username_placeholder" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" data-translate="password_label">Password</label>
+                        <input type="password" id="password" name="password" data-translate="password_placeholder" required>
+                    </div>
+                    
+                    <button type="submit" class="login-button pulse" data-translate="login_button">Login</button>
+                    
+                    <div class="forgot-password">
+                        <a href="/forgot-password" data-translate="forgot_password">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="about-system">
+                <h2 data-translate="about_title">About Our System</h2>
+                <p data-translate="about_desc">
+                    EduTrack is a modern platform designed to help educators easily track students' academic progress. With our system:
+                </p>
+                <ul>
+                    <li data-translate="about_point1">You can track student performance in real time</li>
+                    <li data-translate="about_point2">Automatically generate detailed reports</li>
+                    <li data-translate="about_point3">Manage the educational process more efficiently</li>
+                    <li data-translate="about_point4">Easily communicate with parents</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="video-section">
+            <h2 data-translate="video_title">How to Use Our System?</h2>
+            <p data-translate="video_desc">Here's a short demonstration video of our system's key features:</p>
+            
+            <div class="video-container">
+                <!-- YouTube video embed -->
+                <iframe src="https://www.youtube.com/embed/1UZs5kD5-Mg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 <span data-translate="footer_copyright">EduTrack | All rights reserved</span></p>
+            <p data-translate="footer_contact">Contact: <a href="mailto:info@edutrack.edu.kg">info@edutrack.edu.kg</a> | Phone: <a href="tel:+996123456789">0 (123) 456 78 90</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'title': 'EduTrack - Student Tracking System',
+                'tagline': 'Modern solution for education efficiency and tracking',
+                'feature1_title': 'Performance Analysis',
+                'feature1_desc': 'Analyze student achievements with detailed graphs, easily identify gaps.',
+                'feature2_title': 'Effective Calendar',
+                'feature2_desc': 'View all exams, assignments and events in a single calendar, get reminders.',
+                'feature3_title': 'Detailed Reports',
+                'feature3_desc': 'Create and share automatic reports tracking student progress.',
+                'login_title': 'Login',
+                'username_label': 'Username',
+                'username_placeholder': 'Enter your username',
+                'password_label': 'Password',
+                'password_placeholder': 'Enter your password',
+                'login_button': 'Login',
+                'forgot_password': 'Forgot password?',
+                'about_title': 'About Our System',
+                'about_desc': 'EduTrack is a modern platform designed to help educators easily track students\' academic progress. With our system:',
+                'about_point1': 'You can track student performance in real time',
+                'about_point2': 'Automatically generate detailed reports',
+                'about_point3': 'Manage the educational process more efficiently',
+                'about_point4': 'Easily communicate with parents',
+                'video_title': 'How to Use Our System?',
+                'video_desc': 'Here\'s a short demonstration video of our system\'s key features:',
+                'footer_copyright': 'EduTrack | All rights reserved',
+                'footer_contact': 'Contact: info@edutrack.edu.kg | Phone: 0 (123) 456 78 90'
+            },
+            'ky': {
+                'title': 'EduTrack - Окуучуларды көзөмөлдөө системасы',
+                'tagline': 'Билим берүүдө натыйжалуулук жана көзөмөл үчүн заманбап чечим',
+                'feature1_title': 'Өнүгүүнү талдоо',
+                'feature1_desc': 'Окуучулардын жетишкендиктерин графикалар менен талдоо, кемчиликтерди оңой аныктоо.',
+                'feature2_title': 'Жадыбал',
+                'feature2_desc': 'Сынактарды, тапшырмаларды жана иш-чараларды бир жадыбалда көрүү, эскертмелер алуу.',
+                'feature3_title': 'Деталдуу отчеттор',
+                'feature3_desc': 'Окуучулардын өнүгүүсүн көзөмөлдөөчү автоматикалык отчетторду түзүү жана бөлүшүү.',
+                'login_title': 'Кирүү',
+                'username_label': 'Колдонуучу аты',
+                'username_placeholder': 'Колдонуучу атыңызды киргизиңиз',
+                'password_label': 'Сырсөз',
+                'password_placeholder': 'Сырсөзүңүздү киргизиңиз',
+                'login_button': 'Кирүү',
+                'forgot_password': 'Сырсөздү унуттуңузбу?',
+                'about_title': 'Система жөнүндө',
+                'about_desc': 'EduTrack - бул мугалимдерге окуучулардын билим алуу процессин көзөмөлдөөгө жардам берүүчү заманбап платформа. Биздин система менен:',
+                'about_point1': 'Окуучулардын өнүгүүсүн реалдуу убакытта көзөмөлдөй аласыз',
+                'about_point2': 'Автоматтык түрдө деталдуу отчетторду түзө аласыз',
+                'about_point3': 'Билим берүү процессин натыйжалуураак башкара аласыз',
+                'about_point4': 'Ата-энелер менен оңой байланыша аласыз',
+                'video_title': 'Системаны кантип колдонсо болот?',
+                'video_desc': 'Системабыздын негизги функцияларын көрсөткен кыска демонстрациялык видео:',
+                'footer_copyright': 'EduTrack | Бардык укуктар корголгон',
+                'footer_contact': 'Байланыш: info@edutrack.edu.kg | Телефон: 0 (123) 456 78 90'
+            },
+            'ru': {
+                'title': 'EduTrack - Система отслеживания студентов',
+                'tagline': 'Современное решение для эффективности образования и мониторинга',
+                'feature1_title': 'Анализ успеваемости',
+                'feature1_desc': 'Анализируйте успехи студентов с помощью подробных графиков, легко выявляйте пробелы.',
+                'feature2_title': 'Эффективный календарь',
+                'feature2_desc': 'Просматривайте все экзамены, задания и мероприятия в одном календаре, получайте напоминания.',
+                'feature3_title': 'Подробные отчеты',
+                'feature3_desc': 'Создавайте и делитесь автоматическими отчетами об успеваемости студентов.',
+                'login_title': 'Вход',
+                'username_label': 'Имя пользователя',
+                'username_placeholder': 'Введите имя пользователя',
+                'password_label': 'Пароль',
+                'password_placeholder': 'Введите пароль',
+                'login_button': 'Войти',
+                'forgot_password': 'Забыли пароль?',
+                'about_title': 'О нашей системе',
+                'about_desc': 'EduTrack - это современная платформа, предназначенная для помощи преподавателям в отслеживании академической успеваемости студентов. С нашей системой:',
+                'about_point1': 'Вы можете отслеживать успеваемость студентов в реальном времени',
+                'about_point2': 'Автоматически генерировать подробные отчеты',
+                'about_point3': 'Более эффективно управлять учебным процессом',
+                'about_point4': 'Легко общаться с родителями',
+                'video_title': 'Как пользоваться нашей системой?',
+                'video_desc': 'Короткое демонстрационное видео основных функций нашей системы:',
+                'footer_copyright': 'EduTrack | Все права защищены',
+                'footer_contact': 'Контакт: info@edutrack.edu.kg | Телефон: 0 (123) 456 78 90'
+            }
+        };
+
+        // Set default language
+        let currentLanguage = 'en';
+        
+        // Function to change language
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === (lang === 'en' ? 'English' : lang === 'ky' ? 'Кыргызча' : 'Русский')) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                        element.placeholder = translations[lang][key + '_placeholder'] || '';
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Initialize with default language
+        document.addEventListener('DOMContentLoaded', function() {
+            changeLanguage(currentLanguage);
+            
+            // Add animation to elements when they come into view
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.feature-card, .login-box, .about-system, .video-section');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.animationPlayState = 'running';
+                    }
+                });
+            };
+            
+            // Run once on load
+            animateOnScroll();
+            
+            // And on scroll
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
