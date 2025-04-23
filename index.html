@@ -42,25 +42,38 @@
         }
         
         .language-selector {
-            text-align: right;
+            text-align: center;
             margin-bottom: 20px;
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 0;
+            right: 0;
             z-index: 100;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
         
         .language-btn {
             background: rgba(255,255,255,0.2);
             border: none;
-            padding: 8px 15px;
-            margin: 0 5px;
+            padding: 8px 12px;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
             color: white;
             font-weight: 500;
             backdrop-filter: blur(5px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-btn img {
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            width: 20px;
+            height: auto;
         }
         
         .language-btn:hover, .language-btn.active {
@@ -561,9 +574,15 @@
 <body>
     <div class="container">
         <div class="language-selector">
-            <button class="language-btn active" onclick="changeLanguage('en')">English</button>
-            <button class="language-btn" onclick="changeLanguage('ky')">Кыргызча</button>
-            <button class="language-btn" onclick="changeLanguage('ru')">Русский</button>
+            <button class="language-btn active" onclick="changeLanguage('en')">
+                <img src="https://flagcdn.com/w20/us.png" srcset="https://flagcdn.com/w40/us.png 2x" width="20" alt="English">
+            </button>
+            <button class="language-btn" onclick="changeLanguage('kg')">
+                <img src="https://flagcdn.com/w20/kg.png" srcset="https://flagcdn.com/w40/kg.png 2x" width="20" alt="Кыргызча">
+            </button>
+            <button class="language-btn" onclick="changeLanguage('ru')">
+                <img src="https://flagcdn.com/w20/ru.png" srcset="https://flagcdn.com/w40/ru.png 2x" width="20" alt="Русский">
+            </button>
         </div>
         
         <header>
@@ -639,7 +658,7 @@
             
             <div class="video-container">
                 <!-- YouTube video embed -->
-                <iframe src="https://www.youtube.com/embed/1UZs5kD5-Mg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
         
@@ -679,7 +698,7 @@
                 'footer_copyright': 'EduTrack | All rights reserved',
                 'footer_contact': 'Contact: info@edutrack.edu.kg | Phone: 0 (123) 456 78 90'
             },
-            'ky': {
+            'kg': {
                 'title': 'EduTrack - Окуучуларды көзөмөлдөө системасы',
                 'tagline': 'Билим берүүдө натыйжалуулук жана көзөмөл үчүн заманбап чечим',
                 'feature1_title': 'Өнүгүүнү талдоо',
@@ -745,7 +764,10 @@
             // Update active button
             document.querySelectorAll('.language-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.textContent === (lang === 'en' ? 'English' : lang === 'ky' ? 'Кыргызча' : 'Русский')) {
+                const flagSrc = btn.querySelector('img').src;
+                if ((lang === 'en' && flagSrc.includes('us.png')) || 
+                    (lang === 'kg' && flagSrc.includes('kg.png')) || 
+                    (lang === 'ru' && flagSrc.includes('ru.png'))) {
                     btn.classList.add('active');
                 }
             });
